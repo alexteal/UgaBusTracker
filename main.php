@@ -1,10 +1,19 @@
 <?
 /*
+TODO
+    - functions to iterate over json parsed data
+    - remove all echo's, use returns only. 
+*/
+/*
 * takes a url as a string and returns the raw html
 * @param    url     string with url destination
 * @post     returns string with content of request
-* @post     returns bool false if response is blank
 */
+$arrival_dictionary = array(
+    'Memorial_Hall' => 2737275,
+    'Health_Sciences' => 2737363
+
+);
 function request( $url )
 {
     $curl = curl_init();
@@ -18,9 +27,8 @@ function request( $url )
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => 'GET',
     ));
-    
+    //$curl = curl_init($url);
     $response = curl_exec($curl);
-    echo $response;
     curl_close($curl);
     //TODO
     /*
@@ -28,15 +36,24 @@ function request( $url )
     handle conditions where only one bus is available:w
 
     */
-    if(strlen($response<3)){
-        echo "false";
-        return false;
-    }
-    elseif ($response[0]) { 
-    }
-    else {
-        echo "true";
-        return $response;
-    }
+    //return substr($response,1,strlen($response)-2);
+    return $response;
 } 
+
+/*
+*Return an array with the seconds to arrival for all buses given a json response
+*@param     json response
+*@post      array with seconds for arrival
+*/
+function seconds_to_arrival($response){
+    $response = substr($response,1,strlen($response)-2);
+    $json_obj = json_decode($response);
+    $seconds_to_arrival = array();
+    foreach($json_obj->Arrivals as $bus){
+        array_push($seconds_to_arrival,$bus->SecondsToArrival);
+    }
+    var_export($seconds_to_arrival);
+    return $seconds_to_arrival;
+}
+
 ?>
