@@ -21,7 +21,8 @@ else if($dayofweek==6){
     }
 }
 //saturday
-else if(($dayofweek==5&&$hour>17)||($dayofweek==6&&$hour<3)){
+else if(($dayofweek==5&&$hour>19)||($dayofweek==6&&$hour<3)){
+    echo "test";
     echo give_data($princemilledge.$tatecenter_stop);
 }
 //weekdays and working hours
